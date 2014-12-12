@@ -5,11 +5,14 @@
   "main": "./modules/index",
   "repository": {
     "type": "git",
-    "url": "https://github.com/rackt/react-router.git"
+    "url": "https://github.com/sterpe/react-router.git"
   },
-  "homepage": "https://github.com/rackt/react-router/blob/latest/README.md",
-  "bugs": "https://github.com/rackt/react-router/issues",
+  "homepage": "https://github.com/sterpe/react-router/blob/latest/README.md",
+  "bugs": {
+    "url": "https://github.com/sterpe/react-router/issues"
+  },
   "directories": {
+    "doc": "docs",
     "example": "examples"
   },
   "scripts": {
@@ -18,7 +21,8 @@
   },
   "authors": [
     "Ryan Florence",
-    "Michael Jackson"
+    "Michael Jackson",
+    "Steve Terpe"
   ],
   "license": "MIT",
   "devDependencies": {
@@ -65,7 +69,12 @@
     "routes",
     "router"
   ],
+  "browserify": {
+    "transform": ["browserify-shim"]
+  },
   "browserify-shim": {
-    "react": "global:React"
-  }
+    "react": "global:React",
+    "react/addons": "global:React"
+  },
+  "author": "sterpe <srterpe@gmail.com> (https://github.com/sterpe)"
 }
