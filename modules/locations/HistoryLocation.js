@@ -1,32 +1,24 @@
 var LocationActions = require('../actions/LocationActions');
-var History = require('../utils/History');
-var Path = require('../utils/Path');
+var History = require('../History');
 
-/**
- * Returns the current URL path from `window.location`, including query string.
- */
-function getWindowPath() {
-  return Path.decode(
-    window.location.pathname + window.location.search
-  );
-}
-
-var _changeListeners = [];
+var _listeners = [];
+var _isListening = false;
 
 function notifyChange(type) {
   var change = {
-    path: getWindowPath(),
+    path: HistoryLocation.getCurrentPath(),
     type: type
   };
 
-  _changeListeners.forEach(function (listener) {
-    listener(change);
+  _listeners.forEach(function (listener) {
+    listener.call(HistoryLocation, change);
   });
 }
 
-var _isListening = false;
+function onPopState(event) {
+  if (event.state === undefined)
+    return; // Ignore extraneous popstate events in WebKit.
 
-function onPopState() {
   notifyChange(LocationActions.POP);
 }
 
@@ -35,39 +27,56 @@ function onPopState() {
  */
 var HistoryLocation = {
 
-  addChangeListener: function (listener) {
-    _changeListeners.push(listener);
+  addChangeListener(listener) {
+    _listeners.push(listener);
 
-    if (_isListening)
-      return;
+    if (!_isListening) {
+      if (window.addEventListener) {
+        window.addEventListener('popstate', onPopState, false);
+      } else {
+        window.attachEvent('onpopstate', onPopState);
+      }
 
-    if (window.addEventListener) {
-      window.addEventListener('popstate', onPopState, false);
-    } else {
-      window.attachEvent('popstate', onPopState);
+      _isListening = true;
     }
-
-    _isListening = true;
   },
 
-  push: function (path) {
-    window.history.pushState({ path: path }, '', Path.encode(path));
+  removeChangeListener(listener) {
+    _listeners = _listeners.filter(function (l) {
+      return l !== listener;
+    });
+
+    if (_listeners.length === 0) {
+      if (window.addEventListener) {
+        window.removeEventListener('popstate', onPopState, false);
+      } else {
+        window.removeEvent('onpopstate', onPopState);
+      }
+
+      _isListening = false;
+    }
+  },
+
+  push(path) {
+    window.history.pushState({ path: path }, '', path);
     History.length += 1;
     notifyChange(LocationActions.PUSH);
   },
 
-  replace: function (path) {
-    window.history.replaceState({ path: path }, '', Path.encode(path));
+  replace(path) {
+    window.history.replaceState({ path: path }, '', path);
     notifyChange(LocationActions.REPLACE);
   },
 
-  pop: function () {
-    History.back();
+  pop: History.back,
+
+  getCurrentPath() {
+    return decodeURI(
+      window.location.pathname + window.location.search
+    );
   },
 
-  getCurrentPath: getWindowPath,
-
-  toString: function () {
+  toString() {
     return '<HistoryLocation>';
   }
 

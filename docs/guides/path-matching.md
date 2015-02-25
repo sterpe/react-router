@@ -4,8 +4,8 @@ Path Matching
 Relative v. Absolute Paths
 --------------------------
 
-Paths that start with `/` are absolute, paths that don't are relative,
-meaning they extend their parent's path.
+Paths that start with `/` are absolute. Paths that don't start with `/` are
+relative and extend their parent's path.
 
 ```xml
 <Route path="/">
@@ -30,7 +30,7 @@ automatic view nesting of the router.
 Dynamic Segments
 ----------------
 
-Dynamic segements are defined with a `:`, like `:userId`. They will be
+Dynamic segments are defined with a `:`, like `:userId`. They will be
 parsed and available by name in your route handler on
 `this.props.params`. They match most characters except `/ ? #`.
 
@@ -45,7 +45,7 @@ values.
 Question Mark
 -------------
 
-Question marks will optionally match the preceeding segment.
+Question marks will optionally match the preceding segment.
 
 Examples
 --------

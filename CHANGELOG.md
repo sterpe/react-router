@@ -1,3 +1,74 @@
+v0.12.4 - Tue, 24 Feb 2015 21:53:02 GMT
+---------------------------------------
+
+- [5768506](../../commit/5768506) [fixed] Build generation
+
+
+v0.12.3 - Tue, 24 Feb 2015 21:37:49 GMT
+---------------------------------------
+
+- [aef0dce](../../commit/aef0dce) [fixed] DefaultRoute/NotFoundRoute name regression
+
+
+v0.12.2 - Tue, 24 Feb 2015 00:34:16 GMT
+---------------------------------------
+
+- [196390f](../../commit/196390f) [fixed] Make <Route name>s global, again
+
+
+v0.12.1 - Mon, 23 Feb 2015 22:54:19 GMT
+---------------------------------------
+
+- [3d8a883](../../commit/3d8a883) [fixed] Ignore extraneous popstate events in WebKit
+- [db2607d](../../commit/db2607d) [fixed] Double-encoding of URLs
+- [c5a24a5](../../commit/c5a24a5) [added] Route/Match classes
+- [ae6fcda](../../commit/ae6fcda) [changed] Rename Scrolling => ScrollHistory
+- [f975bdf](../../commit/f975bdf) [fixed] allow a StaticLocation to be passed directly when creating a router
+- [7d52d55](../../commit/7d52d55) [changed] TestLocation is a constructor
+- [193222e](../../commit/193222e) [added] StaticLocation, for server-side rendering
+- [e05e229](../../commit/e05e229) [added] Transition#cancel
+- [04ba639](../../commit/04ba639) [added] Link activeStyle property
+- [585d8ec](../../commit/585d8ec) [fixed] Use more correct children invariant
+- [62c49d2](../../commit/62c49d2) [changed] Change Navigation to return the result of goBack()
+- [83c8f59](../../commit/83c8f59) [fixed] Allow special characters in query
+
+
+v0.12.0 - Tue, 10 Feb 2015 20:12:42 GMT
+---------------------------------------
+
+- [cd2087d](../../commit/cd2087d) [added] default handler to routes
+- [848361e](../../commit/848361e) [fixed] Clean up mounted route component on unmount so we don't leak references
+- [5bcf653](../../commit/5bcf653) [fixed] Double slash in href when parent route has optional trailing slash
+- [e280efd](../../commit/e280efd) [changed] Don't restore scroll position on Forward
+- [20c2c9b](../../commit/20c2c9b) [fixed] Do not decode + in pathname
+- [fe5ec39](../../commit/fe5ec39) [fixed] Double-encoding of query strings
+- [df38294](../../commit/df38294) [fixed] Allow comments in JSX config
+- [84056ba](../../commit/84056ba) [fixed] Ignore falsy routes
+- [4a770e8](../../commit/4a770e8) [fixed] Using TestLocation without DOM
+- [2ac2510](../../commit/2ac2510) [added] router.replaceRoutes(children)
+- [1f81286](../../commit/1f81286) [fixed] Ignore stale transitions
+- [c6ed6fa](../../commit/c6ed6fa) [removed] transition.wait, use callbacks instead
+- [75c6206](../../commit/75c6206) [added] router.stop()
+- [4e96256](../../commit/4e96256) [fixed] Preserve original query with HashLocation
+- [2f19e63](../../commit/2f19e63) [changed] Bump qs dependency version
+
+
+v0.11.6 - Wed, 17 Dec 2014 19:29:53 GMT
+---------------------------------------
+
+- [90cd750](../../commit/90cd750) [fixed] Call all transition hooks on query changes
+
+
+v0.11.5 - Mon, 15 Dec 2014 22:32:38 GMT
+---------------------------------------
+
+- [31e1eb2](../../commit/31e1eb2) [fixed] supportsHistory false negatives on WP 8.1
+- [6417285](../../commit/6417285) [fixed] tearing down location listeners
+- [457d944](../../commit/457d944) [added] Router.History
+- [a07003e](../../commit/a07003e) [fixed] URL hash consistency across browsers
+- [c6aa4d3](../../commit/c6aa4d3) [fixed] Now execute willTransition* hooks even if only query part was changed
+
+
 v0.11.4 - Fri, 28 Nov 2014 16:10:06 GMT
 ---------------------------------------
 
