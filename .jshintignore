@@ -1,2 +1,3 @@
-dist
+build
+examples/**/*-bundle.js
 node_modules

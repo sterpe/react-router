@@ -1,6 +1,5 @@
 var React = require('react');
 var Router = require('react-router');
-var whenKeys = require('when/keys');
 var EventEmitter = require('events').EventEmitter;
 var { Route, DefaultRoute, RouteHandler, Link } = Router;
 
@@ -62,9 +61,9 @@ var App = React.createClass({
   },
 
   renderContacts () {
-    return this.props.data.contacts.map((contact) => {
+    return this.props.data.contacts.map((contact, i) => {
       return (
-        <li>
+        <li key={i}>
           <Link to="contact" params={contact}>{contact.first} {contact.last}</Link>
         </li>
       );
@@ -94,7 +93,7 @@ var Contact = React.createClass({
     var { contact } = this.props.data;
     return (
       <div>
-        <p><Link to="contacts">Back</Link></p>
+        <p><Link to="/">Back</Link></p>
         <h1>{contact.first} {contact.last}</h1>
         <img key={contact.avatar} src={contact.avatar}/>
       </div>
@@ -113,19 +112,20 @@ var Index = React.createClass({
 });
 
 var routes = (
-  <Route name="contacts" path="/" handler={App}>
+  <Route handler={App}>
     <DefaultRoute name="index" handler={Index}/>
     <Route name="contact" path="contact/:id" handler={Contact}/>
   </Route>
 );
 
 function fetchData(routes, params) {
-  return whenKeys.all(routes.filter((route) => {
-    return route.handler.fetchData;
-  }).reduce((data, route) => {
-    data[route.name] = route.handler.fetchData(params);
-    return data;
-  }, {}));
+  var data = {};
+  return Promise.all(routes
+    .filter(route => route.handler.fetchData)
+    .map(route => {
+      return route.handler.fetchData(params).then(d => {data[route.name] = d;});
+    })
+  ).then(() => data);
 }
 
 Router.run(routes, function (Handler, state) {

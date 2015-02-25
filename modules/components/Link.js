@@ -1,8 +1,7 @@
 var React = require('react');
 var classSet = require('react/lib/cx');
 var assign = require('react/lib/Object.assign');
-var Navigation = require('../mixins/Navigation');
-var State = require('../mixins/State');
+var PropTypes = require('../PropTypes');
 
 function isLeftClickEvent(event) {
   return event.button === 0;
@@ -34,14 +33,20 @@ var Link = React.createClass({
 
   displayName: 'Link',
 
-  mixins: [ Navigation, State ],
+  contextTypes: {
+    router: PropTypes.router.isRequired
+  },
 
   propTypes: {
-    activeClassName: React.PropTypes.string.isRequired,
-    to: React.PropTypes.string.isRequired,
-    params: React.PropTypes.object,
-    query: React.PropTypes.object,
-    onClick: React.PropTypes.func
+    activeClassName: PropTypes.string.isRequired,
+    to: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.route
+    ]),
+    params: PropTypes.object,
+    query: PropTypes.object,
+    activeStyle: PropTypes.object,
+    onClick: PropTypes.func
   },
 
   getDefaultProps: function () {
@@ -66,14 +71,14 @@ var Link = React.createClass({
     event.preventDefault();
 
     if (allowTransition)
-      this.transitionTo(this.props.to, this.props.params, this.props.query);
+      this.context.router.transitionTo(this.props.to, this.props.params, this.props.query);
   },
 
   /**
    * Returns the value of the "href" attribute to use on the DOM element.
    */
   getHref: function () {
-    return this.makeHref(this.props.to, this.props.params, this.props.query);
+    return this.context.router.makeHref(this.props.to, this.props.params, this.props.query);
   },
 
   /**
@@ -86,10 +91,14 @@ var Link = React.createClass({
     if (this.props.className)
       classNames[this.props.className] = true;
 
-    if (this.isActive(this.props.to, this.props.params, this.props.query))
+    if (this.getActiveState())
       classNames[this.props.activeClassName] = true;
 
     return classSet(classNames);
+  },
+
+  getActiveState: function () {
+    return this.context.router.isActive(this.props.to, this.props.params, this.props.query);
   },
 
   render: function () {
@@ -98,6 +107,9 @@ var Link = React.createClass({
       className: this.getClassName(),
       onClick: this.handleClick
     });
+
+    if (props.activeStyle && this.getActiveState())
+      props.style = props.activeStyle;
 
     return React.DOM.a(props, this.props.children);
   }

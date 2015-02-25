@@ -1,6 +1,5 @@
 var HistoryLocation = require('./HistoryLocation');
-var History = require('../utils/History');
-var Path = require('../utils/Path');
+var History = require('../History');
 
 /**
  * A Location that uses full page refreshes. This is used as
@@ -9,19 +8,19 @@ var Path = require('../utils/Path');
  */
 var RefreshLocation = {
 
-  push: function (path) {
-    window.location = Path.encode(path);
+  push(path) {
+    window.location = path;
   },
 
-  replace: function (path) {
-    window.location.replace(Path.encode(path));
+  replace(path) {
+    window.location.replace(path);
   },
 
   pop: History.back,
 
   getCurrentPath: HistoryLocation.getCurrentPath,
 
-  toString: function () {
+  toString() {
     return '<RefreshLocation>';
   }
 

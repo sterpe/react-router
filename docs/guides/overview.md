@@ -101,7 +101,7 @@ otherRouter.route('/calendar', function () {
 });
 ```
 
-The three main view's render methods are nearly identical. While one
+The three main views' render methods are nearly identical. While one
 level of shared UI like this is pretty easy to handle, getting deeper
 and deeper adds more complexity.
 
@@ -115,7 +115,7 @@ var App = React.createClass({
     var page;
     switch (this.props.page) {
       case 'dashboard': page = <Dashboard/>; break;
-      case 'inbox': page = <Dashboard/>; break;
+      case 'inbox': page = <InboxRoute/>; break;
       default: page = <Index/>; break;
     }
     return (
@@ -134,7 +134,7 @@ With React Router
 Here's how it works:
 
 1. You declare your view hierarchy with nested `<Route/>`s and provide
-   them with a React element to handle the route when its active.
+   them with a React element to handle the route when it's active.
 
 2. React Router will match the deepest route against the URL, and then
    activate the entire tree of routes on that branch, nesting all the
@@ -144,6 +144,13 @@ Here's how it works:
    active child route.
 
 ```js
+var Router = require('react-router'); // or var Router = ReactRouter; in browsers
+
+var DefaultRoute = Router.DefaultRoute;
+var Link = Router.Link;
+var Route = Router.Route;
+var RouteHandler = Router.RouteHandler;
+
 var App = React.createClass({
   render: function () {
     return (
@@ -182,7 +189,7 @@ When the user lands at `/inbox`, the route named `inbox` gets matched so
 its parent route, `app`, is also matched. The `run` callback receives
 `Handler`, that has all of this match information wrapped up in it.
 
-Rendering `Handler` is really just rendering `App` since its the highest
+Rendering `Handler` is really just rendering `App` since it's the highest
 matched route handler. Since `inbox` is the active child route,
 rendering `<RouteHandler/>` in `App` renders the `Inbox` element.
 `<RouteHandler/>` is nearly identical to `{{outlet}}` from Ember or
@@ -277,7 +284,7 @@ Dynamic Segments
 ----------------
 
 When we added the `message` route, we introduced a "dynamic segment" to
-the URL. These segements get parsed from the url and are available in
+the URL. These segments get parsed from the url and are available in
 the `run` callback, or from the `State` mixin. Let's see how we can
 access the params.
 
@@ -343,13 +350,37 @@ Important Note About Dynamic Segments
 -------------------------------------
 
 If you have dynamic segments in your URL, a transition from `/users/123`
-to `/users/456` does not call `getInitialState`, `componentWillMount` or
-`componentWillUnmount`. If you are using those lifecycle hooks to fetch
+to `/users/456` does not call `getInitialState`, `componentWillMount`, `componentWillUnmount` or `componentDidMount`. If you are using those lifecycle hooks to fetch
 data and set state, you will also need to implement
-`componentWillReceiveProps` on your handler, just like any other
+`componentWillReceiveProps` on your handler and its stateful children, just like any other
 component whose props are changing. This way you can leverage the
 performance of the React DOM diff algorithm. Look at the `Contact`
-handler in the `master-detail` example.
+handler [in the `master-detail` example](https://github.com/rackt/react-router/blob/master/examples/master-detail/app.js).
+
+If you would rather force route handlers to re-mount when transitioning between dynamic segments, you can assign a unique key to your route handler component to bypass this optimization:
+
+```js
+var App = React.createClass({
+
+  mixins: [Router.State],
+
+  getHandlerKey: function () {
+    var childDepth = 1; // assuming App is top-level route
+    var key = this.getRoutes()[childDepth].name;
+    var id = this.getParams().id;
+    if (id) { key += id; }
+    return key;
+  },
+
+  render: function () {
+    return (
+      <div>
+        <RouteHandler key={this.getHandlerKey()} />
+      </div>
+    );
+  }
+});
+```
 
 Scrolling
 ---------

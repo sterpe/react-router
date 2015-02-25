@@ -8,14 +8,21 @@ exports.RouteHandler = require('./components/RouteHandler');
 exports.HashLocation = require('./locations/HashLocation');
 exports.HistoryLocation = require('./locations/HistoryLocation');
 exports.RefreshLocation = require('./locations/RefreshLocation');
+exports.StaticLocation = require('./locations/StaticLocation');
 
 exports.ImitateBrowserBehavior = require('./behaviors/ImitateBrowserBehavior');
 exports.ScrollToTopBehavior = require('./behaviors/ScrollToTopBehavior');
 
-exports.Navigation = require('./mixins/Navigation');
-exports.State = require('./mixins/State');
+exports.History = require('./History');
+exports.Navigation = require('./Navigation');
+exports.RouteHandlerMixin = require('./RouteHandlerMixin');
+exports.State = require('./State');
 
-exports.create = require('./utils/createRouter');
-exports.run = require('./utils/runRouter');
+exports.createRoute = require('./Route').createRoute;
+exports.createDefaultRoute = require('./Route').createDefaultRoute;
+exports.createNotFoundRoute = require('./Route').createNotFoundRoute;
+exports.createRedirect = require('./Route').createRedirect;
+exports.createRoutesFromReactChildren = require('./createRoutesFromReactChildren');
+exports.create = require('./createRouter');
+exports.run = require('./runRouter');
 
-exports.History = require('./utils/History');
