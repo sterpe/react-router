@@ -31,5 +31,12 @@
     "route",
     "routes",
     "router"
-  ]
+  ],
+  "browserify": {
+    "transform": ["browserify-shim"]
+  },
+  "browserify-shim": {
+    "react": "global:React",
+    "react/addons": "global:React"
+  }
 }
